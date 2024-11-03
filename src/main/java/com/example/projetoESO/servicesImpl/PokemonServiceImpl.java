@@ -18,4 +18,9 @@ public class PokemonServiceImpl implements PokemonService {
         return pokemonRepository.findAll();
     }
 
+    @Override
+    public void savePokemon(Pokemon pokemon) {
+        pokemonRepository.save(pokemon);
+    }
+
 }

@@ -1,7 +1,8 @@
 package com.example.projetoESO.controllers;
 
+import com.example.projetoESO.dto.PokemonDTO;
 import com.example.projetoESO.entities.Pokemon;
-import com.example.projetoESO.services.PokemonApiHttpService;
+import com.example.projetoESO.services.ApiHttpService;
 import com.example.projetoESO.services.PokemonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,7 @@ public class PokemonController {
     @Autowired
     private PokemonService pokemonService;
     @Autowired
-    private PokemonApiHttpService pokemonApiHttpService;
+    private ApiHttpService apiHttpService;
 
     @GetMapping("/pokemon")
     List<Pokemon> getAllPokemons() {
@@ -25,8 +26,8 @@ public class PokemonController {
     }
 
     @GetMapping("/pokemon/api")
-    String getAllPokemonsApi() throws IOException, InterruptedException {
-        return pokemonApiHttpService.getAllPokemons(1302, 0);
+    List<PokemonDTO> getAllPokemonsApi() throws IOException, InterruptedException {
+        return apiHttpService.requestApiGetAllPokemons(1302, 0);
     }
 
 }

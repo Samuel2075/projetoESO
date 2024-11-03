@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PokemonService {
     List<Pokemon> getAllPokemons();
+
+    void savePokemon(Pokemon pokemon);
 }
