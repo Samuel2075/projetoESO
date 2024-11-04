@@ -17,7 +17,7 @@ public class Pokemon {
     private String name;
     private String urlStatus;
     @ManyToOne
-    @JoinColumn(name="habitat_id", nullable=false)
+    @JoinColumn(name="habitat_id")
     private Habitat habitat;
     @ManyToMany
     @JoinTable(
@@ -26,6 +26,15 @@ public class Pokemon {
             inverseJoinColumns = @JoinColumn(name = "type_id")
     )
     private Set<Types> types = new HashSet<>();
-    private String color;
-
+    @ManyToMany
+    @JoinTable(
+            name = "pokemon_color",
+            joinColumns = @JoinColumn(name = "pokemon_id"),
+            inverseJoinColumns = @JoinColumn(name = "color_id")
+    )
+    private Set<Color> colors = new HashSet<>();
+    private String front_default;
+    private String front_shiny;
+    private int base_experience;
+    private int weight;
 }

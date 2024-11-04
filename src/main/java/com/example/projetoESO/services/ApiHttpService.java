@@ -11,4 +11,5 @@ public interface ApiHttpService {
     List<TypeDTO> requestApiGetTypes();
     List<ColorDTO> requestApiGetColors();
     PokemonStatusDTO requestApiGetStatusPokemon(String namePokemon);
+    ColorPokemonsDTO requestApiGetPokemonsColor(String color);
 }

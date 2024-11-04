@@ -1,5 +1,6 @@
 package com.example.projetoESO.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,5 +18,6 @@ public class Habitat {
     private String name;
     private String url;
     @OneToMany(mappedBy = "habitat", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Pokemon> pokemons = new HashSet<>();
 }

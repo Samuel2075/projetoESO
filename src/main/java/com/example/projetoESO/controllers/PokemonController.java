@@ -1,13 +1,11 @@
 package com.example.projetoESO.controllers;
 
-import com.example.projetoESO.dto.PokemonDTO;
-import com.example.projetoESO.entities.Pokemon;
-import com.example.projetoESO.services.ApiHttpService;
+import com.example.projetoESO.form.PokemonFilterForm;
 import com.example.projetoESO.services.PokemonService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,17 +15,15 @@ import java.util.List;
 public class PokemonController {
     @Autowired
     private PokemonService pokemonService;
-    @Autowired
-    private ApiHttpService apiHttpService;
 
-    @GetMapping("/pokemon")
-    List<Pokemon> getAllPokemons() {
-        return pokemonService.getAllPokemons();
+    @PostMapping("/pokemon/filter")
+    ResponseEntity<?> getPokemonsFilter(@RequestBody @Valid PokemonFilterForm pokemonFilterRequest) {
+        return ResponseEntity.ok(pokemonService.filterPokemons(pokemonFilterRequest));
     }
 
-    @GetMapping("/pokemon/api")
-    List<PokemonDTO> getAllPokemonsApi() throws IOException, InterruptedException {
-        return apiHttpService.requestApiGetAllPokemons(1302, 0);
+    @GetMapping("/pokemon")
+    ResponseEntity<?> getAllPokemons() {
+        return ResponseEntity.ok(pokemonService.getAllPokemons());
     }
 
 }

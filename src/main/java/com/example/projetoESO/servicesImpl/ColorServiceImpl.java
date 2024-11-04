@@ -6,6 +6,8 @@ import com.example.projetoESO.services.ColorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ColorServiceImpl implements ColorService {
     @Autowired
@@ -13,5 +15,15 @@ public class ColorServiceImpl implements ColorService {
     @Override
     public void saveColor(Color color) {
         colorRepository.save(color);
+    }
+
+    @Override
+    public List<Color> getAllColors() {
+        return colorRepository.findAll();
+    }
+
+    @Override
+    public Color getColorByName(String name) {
+        return colorRepository.findByName(name);
     }
 }

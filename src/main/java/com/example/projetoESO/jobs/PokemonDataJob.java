@@ -1,6 +1,9 @@
 package com.example.projetoESO.jobs;
 
 import com.example.projetoESO.dto.*;
+import com.example.projetoESO.entities.Color;
+import com.example.projetoESO.entities.Habitat;
+import com.example.projetoESO.entities.Pokemon;
 import com.example.projetoESO.entities.Types;
 import com.example.projetoESO.services.*;
 import jakarta.annotation.PostConstruct;
@@ -8,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class PokemonDataJob {
@@ -27,9 +30,12 @@ public class PokemonDataJob {
     @PostConstruct
     @Scheduled(cron = "0 0 0 * * MON")
     public void updateDataStoragePokemon() {
-        this.populateTypes();
+        /*this.populateTypes();
         this.populateColors();
         this.populateHabitat();
+        this.populatePokemon();
+        this.linkColorPokemon();
+        this.linkPokemonHabitat();*/
     }
 
     private void populateTypes() {
@@ -41,12 +47,9 @@ public class PokemonDataJob {
 
     private void populateHabitat() {
         List<HabitatsDTO> habitatsList = apiHttpService.requestApiGetHabitats();
-        List<PokemonsHabitatDTO> pokemonsHabitatList = new ArrayList<>();
         habitatsList.forEach((habitat) -> {
             habitatService.saveHabitat(habitat.convertDtoHabitatToEntity());
-            pokemonsHabitatList.add(apiHttpService.requestApiGetPokemonsHabitats(habitat.getName()));
         });
-        this.populatePokemon(pokemonsHabitatList);
     }
 
     private void populateColors() {
@@ -56,16 +59,49 @@ public class PokemonDataJob {
         });
     }
 
-    private void populatePokemon(List<PokemonsHabitatDTO> pokemonsHabitatList) {
-
-        List<PokemonDTO> pokemonsList = apiHttpService.requestApiGetAllPokemons(1302, 0);
-        List<PokemonStatusDTO> pokemonStatusList = new ArrayList<>();
+    private void populatePokemon() {
+        List<Types> typesPokemon = new ArrayList<>();
+        List<PokemonDTO> pokemonsList = apiHttpService.requestApiGetAllPokemons(1303, 0);
         pokemonsList.forEach((pokemon) -> {
-            pokemonStatusList.add(apiHttpService.requestApiGetStatusPokemon(pokemon.getName()));
-            System.out.println(pokemon.getName());
-            //pokemonService.savePokemon(pokemon.convertDtoPokemonToEntity());
+            PokemonStatusDTO pokemonStatusDTO = apiHttpService.requestApiGetStatusPokemon(pokemon.getName());
+
+            pokemonStatusDTO.getTypes().forEach((type) -> {
+                typesPokemon.add(typeService.getTypeByName(type.getType().getName()));
+            });
+            pokemonService.savePokemon(pokemon.convertDtoPokemonToEntity(typesPokemon, pokemonStatusDTO.getSprites(), pokemonStatusDTO.getWeight(), pokemonStatusDTO.getBase_experience()));
+            typesPokemon.clear();
+            System.out.println(pokemonStatusDTO.getName());
         });
-        String teste = ":D";
+    }
+
+    private void linkColorPokemon() {
+        List<Color> colorsList = colorService.getAllColors();
+        colorsList.forEach((color) -> {
+            ColorPokemonsDTO colorPokemonsDTO = apiHttpService.requestApiGetPokemonsColor(color.getName());
+            colorPokemonsDTO.getPokemon_species().forEach((pokemon) -> {
+                Pokemon pokemonEntity = pokemonService.getPokemonByName(pokemon.getName());
+                if(pokemonEntity != null) {
+                    Set<Color> colorSet = new HashSet<>();
+                    colorSet.add(color);
+                    pokemonEntity.setColors(colorSet);
+                    pokemonService.updatePokemon(pokemonEntity);
+                }
+            });
+        });
+    }
+
+    private void linkPokemonHabitat() {
+        List<Habitat> listHabitats = habitatService.getAllHabitats();
+        listHabitats.forEach((habitat) -> {
+            PokemonsHabitatDTO pokemonsHabitatDTO = apiHttpService.requestApiGetPokemonsHabitats(habitat.getUrl());
+            pokemonsHabitatDTO.getPokemon_species().forEach((pokemon) -> {
+               Pokemon pokemonEntity = pokemonService.getPokemonByName(pokemon.getName());
+               if(pokemonEntity != null) {
+                   pokemonEntity.setHabitat(habitat);
+                   pokemonService.updatePokemon(pokemonEntity);
+               }
+            });
+        });
     }
 
 }

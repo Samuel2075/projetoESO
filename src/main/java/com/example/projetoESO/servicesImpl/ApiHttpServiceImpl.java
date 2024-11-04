@@ -37,8 +37,8 @@ public class ApiHttpServiceImpl implements ApiHttpService {
     }
 
     @Override
-    public PokemonsHabitatDTO requestApiGetPokemonsHabitats(String habitat) {
-        ResponseEntity<PokemonsHabitatDTO> responseEntity = this.requestApi(String.format("https://pokeapi.co/api/v2/pokemon-habitat/%s/", habitat), PokemonsHabitatDTO.class);
+    public PokemonsHabitatDTO requestApiGetPokemonsHabitats(String url) {
+        ResponseEntity<PokemonsHabitatDTO> responseEntity = this.requestApi(url, PokemonsHabitatDTO.class);
         return responseEntity.getBody();
     }
 
@@ -63,6 +63,11 @@ public class ApiHttpServiceImpl implements ApiHttpService {
     @Override
     public PokemonStatusDTO requestApiGetStatusPokemon(String namePokemon) {
         ResponseEntity<PokemonStatusDTO> responseEntity = this.requestApi(String.format("https://pokeapi.co/api/v2/pokemon/%s/", namePokemon), PokemonStatusDTO.class);
+        return responseEntity.getBody();
+    }
+    @Override
+    public ColorPokemonsDTO requestApiGetPokemonsColor(String color) {
+        ResponseEntity<ColorPokemonsDTO> responseEntity = this.requestApi(String.format("https://pokeapi.co/api/v2/pokemon-color/%s/", color), ColorPokemonsDTO.class);
         return responseEntity.getBody();
     }
 
