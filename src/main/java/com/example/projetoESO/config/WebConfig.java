@@ -8,7 +8,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://damp-waters-81236-5574034b183b.herokuapp.com")
+                .allowedOrigins("https://pokedexprojetoeso.netlify.app")
                 .allowedMethods("GET", "POST")
                 .allowedHeaders("*");
     }
