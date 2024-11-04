@@ -6,6 +6,7 @@ import com.example.projetoESO.services.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,5 +21,10 @@ public class TypeServiceImpl implements TypeService {
     @Override
     public Types getTypeByName(String name) {
         return typeRepository.findByName(name);
+    }
+
+    @Override
+    public List<Types> getAllTypes() {
+        return typeRepository.findAll();
     }
 }

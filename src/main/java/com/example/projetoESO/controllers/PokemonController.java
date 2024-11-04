@@ -21,9 +21,10 @@ public class PokemonController {
         return ResponseEntity.ok(pokemonService.filterPokemons(pokemonFilterRequest));
     }
 
-    @GetMapping("/pokemon")
-    ResponseEntity<?> getAllPokemons() {
-        return ResponseEntity.ok(pokemonService.getAllPokemons());
+    @GetMapping("/pokemon/{page}/{size}")
+    @ResponseBody
+    ResponseEntity<?> getAllPokemons(@PathVariable int page, @PathVariable int size) {
+        return ResponseEntity.ok(pokemonService.getAllPokemons(page, size));
     }
 
 }
