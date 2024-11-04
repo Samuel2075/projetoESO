@@ -33,8 +33,8 @@ public class PokemonDataJob {
         this.populateColors();
         this.populateHabitat();
         this.populatePokemon();*/
-        this.linkColorPokemon();
-        this.linkPokemonHabitat();
+        //this.linkColorPokemon();
+        //this.linkPokemonHabitat();
     }
 
     private void populateTypes() {
