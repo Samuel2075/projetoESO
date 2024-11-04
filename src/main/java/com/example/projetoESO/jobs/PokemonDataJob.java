@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class PokemonDataJob {
@@ -30,12 +29,12 @@ public class PokemonDataJob {
     @PostConstruct
     @Scheduled(cron = "0 0 0 * * MON")
     public void updateDataStoragePokemon() {
-        /*this.populateTypes();
+        this.populateTypes();
         this.populateColors();
         this.populateHabitat();
         this.populatePokemon();
         this.linkColorPokemon();
-        this.linkPokemonHabitat();*/
+        this.linkPokemonHabitat();
     }
 
     private void populateTypes() {
