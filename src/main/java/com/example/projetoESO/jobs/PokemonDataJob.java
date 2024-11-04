@@ -29,10 +29,10 @@ public class PokemonDataJob {
     @PostConstruct
     @Scheduled(cron = "0 0 0 * * MON")
     public void updateDataStoragePokemon() {
-        this.populateTypes();
+        /*this.populateTypes();
         this.populateColors();
         this.populateHabitat();
-        this.populatePokemon();
+        this.populatePokemon();*/
         this.linkColorPokemon();
         this.linkPokemonHabitat();
     }
