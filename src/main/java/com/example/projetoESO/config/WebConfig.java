@@ -9,7 +9,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("https://pokedexprojetoeso.netlify.app")
-                .allowedMethods("GET", "POST")
+                //.allowedOrigins("http://localhost:8080")
+                .allowedMethods("GET", "POST", "PUT")
                 .allowedHeaders("*");
     }
 }
