@@ -9,8 +9,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
 
         registry.addMapping("/**")
-                //.allowedOrigins("https://pokedexprojetoeso.netlify.app")
-                .allowedOrigins("http://localhost:3000") // Permite a origem do seu frontend
+                .allowedOrigins("https://pokedexprojetoeso.netlify.app")
+                //.allowedOrigins("http://localhost:3000") // Permite a origem do seu frontend
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos permitidos
                 .allowedHeaders("Authorization", "Content-Type") // Cabeçalhos permitidos
                 .allowCredentials(true);
