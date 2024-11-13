@@ -23,7 +23,6 @@ public class User {
     @Column(nullable = false)
     private String password;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private Set<Pokemon> pokemons = new HashSet<>();
 
     public void addPokemon(Pokemon pokemon) {

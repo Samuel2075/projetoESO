@@ -1,5 +1,6 @@
 package com.example.projetoESO.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +36,7 @@ public class Pokemon {
     private Set<Color> colors = new HashSet<>();
     @ManyToOne
     @JoinColumn(name="user_id")
+    @JsonIgnore
     private User user;
     private String front_default;
     private String front_shiny;

@@ -14,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -30,19 +33,34 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/auth/login", "/user/register")  // Permite as rotas públicas sem autenticação
-                                .permitAll()  // Permite todas as requisições para essas rotas
-                                .anyRequest()  // Para todas as outras requisições, exige autenticação
+                                .requestMatchers("/auth/login", "/user/register")
+                                .permitAll()
+                                .anyRequest()
                                 .authenticated()
                 )
                 .sessionManagement(sm ->
-                        sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Define a política de sessão como sem estado
+                        sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
-        // Adiciona o filtro JWT, para que ele seja aplicado nas requisições que exigem autenticação
+        // Adiciona o filtro de CORS antes do filtro de autenticação JWT
+        http.addFilterBefore(corsFilter(), CorsFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:3000"); // Altere para o domínio do seu frontend
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 
     @Bean
