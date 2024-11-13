@@ -33,6 +33,9 @@ public class Pokemon {
             inverseJoinColumns = @JoinColumn(name = "color_id")
     )
     private Set<Color> colors = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
     private String front_default;
     private String front_shiny;
     private int base_experience;

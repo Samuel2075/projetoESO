@@ -19,7 +19,6 @@ public class PokemonDTO {
         Pokemon pokemonEntity = new Pokemon();
         pokemonEntity.setName(this.getName());
         pokemonEntity.setUrlStatus(this.getUrl());
-        //pokemonEntity.setHabitat(habitatEntity);
         typesPokemon.forEach((type) -> {
             pokemonEntity.setTypes(Collections.singleton(type));
         });

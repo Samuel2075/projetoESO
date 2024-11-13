@@ -1,7 +1,11 @@
 package com.example.projetoESO.services;
 
-import org.springframework.security.core.Authentication;
+import io.jsonwebtoken.Claims;
 
 public interface JwtService {
-    String generateToken(Authentication authentication);
+    String generateToken(String username);
+    Claims getClaimsFromToken(String token);
+    boolean isTokenValid(String token);
+    String getUsernameFromToken(String token);
+
 }

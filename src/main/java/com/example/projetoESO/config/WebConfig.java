@@ -8,8 +8,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://pokedexprojetoeso.netlify.app")
-                //.allowedOrigins("http://localhost:8080")
+                //.allowedOrigins("https://pokedexprojetoeso.netlify.app")
+                .allowedOrigins("http://localhost:8080")
                 .allowedMethods("GET", "POST", "PUT")
                 .allowedHeaders("*");
     }
