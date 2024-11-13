@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "https://pokedexprojetoeso.netlify.app", allowedHeaders = "Authorization, Content-Type")
 public class UserController {
     @Autowired
     private UserService userService;
