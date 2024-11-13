@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "https://pokedexprojetoeso.netlify.app", allowedHeaders = "Authorization, Content-Type")
 public class UserController {
     @Autowired
     private UserService userService;
+    @CrossOrigin(origins = "https://pokedexprojetoeso.netlify.app")
     @PostMapping("/register")
     public ResponseEntity<?>  registerUser(@RequestBody RegisterForm registerForm) {
         ResponseJwtDTO responseJwtDTO = new ResponseJwtDTO();
@@ -30,6 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/pokemon/capture")
+    @CrossOrigin(origins = "https://pokedexprojetoeso.netlify.app", allowedHeaders = "Authorization, Content-Type")
     @ResponseBody
     ResponseEntity<?> capturePokemon(@RequestBody @Valid CapturePokemonDTO capturePokemonDTO) {
         return ResponseEntity.ok(userService.capturePokemon(capturePokemonDTO));
