@@ -24,7 +24,7 @@ public class AuthenticationController {
     @Autowired
     private JwtService jwtService;
 
-    @CrossOrigin(origins = "https://pokedexprojetoeso.netlify.app")
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginForm loginForm) {
         Authentication authentication = authenticationManager.authenticate(

@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping()
-@CrossOrigin(origins = "https://pokedexprojetoeso.netlify.app", allowedHeaders = "Authorization, Content-Type")
 public class PokemonController {
     @Autowired
     private PokemonService pokemonService;
