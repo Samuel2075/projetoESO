@@ -120,7 +120,6 @@ public class PokemonServiceImpl implements PokemonService {
         if (pokemonFilterForm.getMaxBaseExperience() > 0) {
             predicates.add(cb.lessThanOrEqualTo(pokemon.get("base_experience"), pokemonFilterForm.getMaxBaseExperience()));
         }
-        predicates.add(cb.isNull(pokemon.get("user")));
 
         cq.select(pokemon).where(predicates.toArray(new Predicate[0]));
         TypedQuery<Pokemon> query = entityManager.createQuery(cq);
