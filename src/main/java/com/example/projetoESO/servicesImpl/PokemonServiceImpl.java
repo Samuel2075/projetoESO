@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PokemonServiceImpl implements PokemonService {
@@ -83,68 +84,59 @@ public class PokemonServiceImpl implements PokemonService {
     public List<PokemonDTO> filterPokemons(PokemonFilterForm pokemonFilterForm) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Pokemon> cq = cb.createQuery(Pokemon.class);
-        Boolean filterApply = false;
         Root<Pokemon> pokemon = cq.from(Pokemon.class);
-        Join<Pokemon, Habitat> habitat = pokemon.join("habitat");
-        Join<Pokemon, Color> color = pokemon.join("colors");
-        Join<Pokemon, Types> type = pokemon.join("types");
-        List<PokemonDTO> pokemonsListResponse = new ArrayList<>();
+        Join<Pokemon, Habitat> habitat = pokemon.join("habitat", JoinType.LEFT);
+        Join<Pokemon, Color> color = pokemon.join("colors", JoinType.LEFT);
+        Join<Pokemon, Types> type = pokemon.join("types", JoinType.LEFT);
+
         List<Predicate> predicates = new ArrayList<>();
 
-        if(pokemonFilterForm.getAllCapturetedPokemons()) {
+
+        if (pokemonFilterForm.getAllCapturetedPokemons()) {
             predicates.add(cb.isNotNull(pokemon.get("user_id")));
-        } else if(pokemonFilterForm.getIdUser() > 0) {
+        } else if (pokemonFilterForm.getIdUser() > 0) {
             predicates.add(cb.equal(pokemon.get("user_id"), pokemonFilterForm.getIdUser()));
         } else {
             if (pokemonFilterForm.getName() != null && !pokemonFilterForm.getName().isEmpty()) {
-                predicates.add(cb.like(pokemon.get("name"), "%" + pokemonFilterForm.getName() + "%"));
-                filterApply = true;
+                predicates.add(cb.like(cb.lower(pokemon.get("name")), "%" + pokemonFilterForm.getName().toLowerCase() + "%"));
             }
             if (pokemonFilterForm.getType() != null && !pokemonFilterForm.getType().isEmpty()) {
                 predicates.add(cb.equal(type.get("name"), pokemonFilterForm.getType()));
-                filterApply = true;
             }
             if (pokemonFilterForm.getColor() != null && !pokemonFilterForm.getColor().isEmpty()) {
                 predicates.add(cb.equal(color.get("name"), pokemonFilterForm.getColor()));
-                filterApply = true;
             }
             if (pokemonFilterForm.getHabitat() != null && !pokemonFilterForm.getHabitat().isEmpty()) {
                 predicates.add(cb.equal(habitat.get("name"), pokemonFilterForm.getHabitat()));
-                filterApply = true;
             }
-            if (pokemonFilterForm.getMinWeight() != 0) {
+            if (pokemonFilterForm.getMinWeight() > 0) {
                 predicates.add(cb.greaterThanOrEqualTo(pokemon.get("weight"), pokemonFilterForm.getMinWeight()));
-                filterApply = true;
             }
-            if (pokemonFilterForm.getMaxWeight() != 0) {
+            if (pokemonFilterForm.getMaxWeight() > 0) {
                 predicates.add(cb.lessThanOrEqualTo(pokemon.get("weight"), pokemonFilterForm.getMaxWeight()));
-                filterApply = true;
             }
-            if (pokemonFilterForm.getMinBaseExperience() != 0) {
+            if (pokemonFilterForm.getMinBaseExperience() > 0) {
                 predicates.add(cb.greaterThanOrEqualTo(pokemon.get("base_experience"), pokemonFilterForm.getMinBaseExperience()));
-                filterApply = true;
             }
-            if (pokemonFilterForm.getMaxBaseExperience() != 0) {
+            if (pokemonFilterForm.getMaxBaseExperience() > 0) {
                 predicates.add(cb.lessThanOrEqualTo(pokemon.get("base_experience"), pokemonFilterForm.getMaxBaseExperience()));
-                filterApply = true;
             }
         }
 
-        cq.select(pokemon).where(predicates.toArray(new Predicate[0]));
 
+
+
+        cq.select(pokemon).where(predicates.toArray(new Predicate[0]));
         TypedQuery<Pokemon> query = entityManager.createQuery(cq);
         query.setFirstResult(pokemonFilterForm.getPage() * pokemonFilterForm.getSize());
         query.setMaxResults(pokemonFilterForm.getSize());
-        if(filterApply) {
-            List<PokemonDTO> finalPokemonsListResponse = pokemonsListResponse;
-            query.getResultList().stream().forEach(pokemonCurrent -> {
-                finalPokemonsListResponse.add(convertEntityToDto(pokemonCurrent));
-            });
-        } else {
-            pokemonsListResponse = this.getAllPokemons(0, 10);
-        }
+
+        List<PokemonDTO> pokemonsListResponse = query.getResultList().stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
 
         return pokemonsListResponse;
     }
+
 
 }
