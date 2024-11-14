@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         } else {
             response.setMessage("Usuário ou pokemon inesistente!");
         }
-        response.setData(user);
+
         return response;
     }
 }

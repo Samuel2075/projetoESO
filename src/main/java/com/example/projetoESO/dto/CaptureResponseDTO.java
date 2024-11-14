@@ -7,6 +7,5 @@ import lombok.Setter;
 @Setter
 public class CaptureResponseDTO {
     private String message;
-    private Object data;
-    private boolean error;
+    private Boolean error;
 }
