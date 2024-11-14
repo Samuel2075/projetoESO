@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
                 response.setMessage("Jogador já capturou 3 ou mais pokemons!");
                 response.setError(true);
             } else {
+                response.setMessage("Pokemon capturado com sucesso!");
                 user.addPokemon(pokemon);
                 userRepository.save(user);
             }
