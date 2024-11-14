@@ -85,7 +85,7 @@ public class PokemonServiceImpl implements PokemonService {
         Join<Pokemon, Habitat> habitat = pokemon.join("habitat");
         Join<Pokemon, Color> color = pokemon.join("colors");
         Join<Pokemon, Types> type = pokemon.join("types");
-        List<PokemonDTO> pokemonsResponseList;
+        List<PokemonDTO> pokemonsListResponse = new ArrayList<>();
         List<Predicate> predicates = new ArrayList<>();
         if (pokemonFilterForm.getName() != null && !pokemonFilterForm.getName().isEmpty()) {
             predicates.add(cb.like(pokemon.get("name"), "%" + pokemonFilterForm.getName() + "%"));
@@ -126,15 +126,15 @@ public class PokemonServiceImpl implements PokemonService {
         query.setFirstResult(pokemonFilterForm.getPage() * pokemonFilterForm.getSize());
         query.setMaxResults(pokemonFilterForm.getSize());
         if(filterApply) {
-            pokemonsResponseList = null;
+            List<PokemonDTO> finalPokemonsListResponse = pokemonsListResponse;
             query.getResultList().stream().forEach(pokemonCurrent -> {
-                pokemonsResponseList.add(convertEntityToDto(pokemonCurrent));
+                finalPokemonsListResponse.add(convertEntityToDto(pokemonCurrent));
             });
         } else {
-            pokemonsResponseList = this.getAllPokemons(0, 10);
+            pokemonsListResponse = this.getAllPokemons(0, 10);
         }
 
-        return pokemonsResponseList;
+        return pokemonsListResponse;
     }
 
 }
