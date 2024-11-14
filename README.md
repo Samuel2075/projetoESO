@@ -33,3 +33,6 @@
 
 ## ApiHttpService 
 #### Onde se encontra todas as funções que fazem requisições a API do pokemon.
+
+## JWT
+#### 
