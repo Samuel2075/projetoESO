@@ -94,6 +94,8 @@ public class PokemonServiceImpl implements PokemonService {
             predicates.add(cb.isNotNull(pokemon.get("user")));
         } else if ("SP".equals(pokemonFilterForm.getPokemonsActions())) {
             predicates.add(cb.equal(pokemon.get("user").get("id"), pokemonFilterForm.getIdUser()));
+        } else {
+            predicates.add(cb.isNull(pokemon.get("user")));
         }
 
         if (pokemonFilterForm.getName() != null && !pokemonFilterForm.getName().isEmpty()) {
