@@ -17,6 +17,6 @@ public class PokemonFilterForm {
     private int page;
     private int size;
     private long idUser;
-    private Boolean allCapturetedPokemons;
+    private String pokemonsActions;
 
 }
