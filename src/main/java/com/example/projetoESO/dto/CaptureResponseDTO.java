@@ -8,5 +8,5 @@ import lombok.Setter;
 public class CaptureResponseDTO {
     private String message;
     private Boolean error;
-    private String nameUser;
+    private UserPokemonDTO user;
 }

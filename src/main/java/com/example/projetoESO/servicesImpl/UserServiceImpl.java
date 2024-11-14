@@ -2,6 +2,7 @@ package com.example.projetoESO.servicesImpl;
 
 import com.example.projetoESO.dto.CapturePokemonDTO;
 import com.example.projetoESO.dto.CaptureResponseDTO;
+import com.example.projetoESO.dto.UserPokemonDTO;
 import com.example.projetoESO.entities.Color;
 import com.example.projetoESO.entities.Pokemon;
 import com.example.projetoESO.entities.User;
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
         } else {
             response.setMessage("Usuário ou pokemon inesistente!");
         }
-        response.setNameUser(user.getName());
+        response.setUser(new UserPokemonDTO(user.getId(), user.getName()));
         return response;
     }
 }
