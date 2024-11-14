@@ -90,37 +90,44 @@ public class PokemonServiceImpl implements PokemonService {
         Join<Pokemon, Types> type = pokemon.join("types");
         List<PokemonDTO> pokemonsListResponse = new ArrayList<>();
         List<Predicate> predicates = new ArrayList<>();
-        if (pokemonFilterForm.getName() != null && !pokemonFilterForm.getName().isEmpty()) {
-            predicates.add(cb.like(pokemon.get("name"), "%" + pokemonFilterForm.getName() + "%"));
-            filterApply = true;
-        }
-        if (pokemonFilterForm.getType() != null && !pokemonFilterForm.getType().isEmpty()) {
-            predicates.add(cb.equal(type.get("name"), pokemonFilterForm.getType()));
-            filterApply = true;
-        }
-        if (pokemonFilterForm.getColor() != null && !pokemonFilterForm.getColor().isEmpty()) {
-            predicates.add(cb.equal(color.get("name"), pokemonFilterForm.getColor()));
-            filterApply = true;
-        }
-        if (pokemonFilterForm.getHabitat() != null && !pokemonFilterForm.getHabitat().isEmpty()) {
-            predicates.add(cb.equal(habitat.get("name"), pokemonFilterForm.getHabitat()));
-            filterApply = true;
-        }
-        if (pokemonFilterForm.getMinWeight() != 0) {
-            predicates.add(cb.greaterThanOrEqualTo(pokemon.get("weight"), pokemonFilterForm.getMinWeight()));
-            filterApply = true;
-        }
-        if (pokemonFilterForm.getMaxWeight() != 0) {
-            predicates.add(cb.lessThanOrEqualTo(pokemon.get("weight"), pokemonFilterForm.getMaxWeight()));
-            filterApply = true;
-        }
-        if (pokemonFilterForm.getMinBaseExperience() != 0) {
-            predicates.add(cb.greaterThanOrEqualTo(pokemon.get("base_experience"), pokemonFilterForm.getMinBaseExperience()));
-            filterApply = true;
-        }
-        if (pokemonFilterForm.getMaxBaseExperience() != 0) {
-            predicates.add(cb.lessThanOrEqualTo(pokemon.get("base_experience"), pokemonFilterForm.getMaxBaseExperience()));
-            filterApply = true;
+
+        if(pokemonFilterForm.getAllCapturetedPokemons()) {
+            predicates.add(cb.isNotNull(pokemon.get("user_id")));
+        } else if(pokemonFilterForm.getIdUser() > 0) {
+            predicates.add(cb.equal(pokemon.get("user_id"), pokemonFilterForm.getIdUser()));
+        } else {
+            if (pokemonFilterForm.getName() != null && !pokemonFilterForm.getName().isEmpty()) {
+                predicates.add(cb.like(pokemon.get("name"), "%" + pokemonFilterForm.getName() + "%"));
+                filterApply = true;
+            }
+            if (pokemonFilterForm.getType() != null && !pokemonFilterForm.getType().isEmpty()) {
+                predicates.add(cb.equal(type.get("name"), pokemonFilterForm.getType()));
+                filterApply = true;
+            }
+            if (pokemonFilterForm.getColor() != null && !pokemonFilterForm.getColor().isEmpty()) {
+                predicates.add(cb.equal(color.get("name"), pokemonFilterForm.getColor()));
+                filterApply = true;
+            }
+            if (pokemonFilterForm.getHabitat() != null && !pokemonFilterForm.getHabitat().isEmpty()) {
+                predicates.add(cb.equal(habitat.get("name"), pokemonFilterForm.getHabitat()));
+                filterApply = true;
+            }
+            if (pokemonFilterForm.getMinWeight() != 0) {
+                predicates.add(cb.greaterThanOrEqualTo(pokemon.get("weight"), pokemonFilterForm.getMinWeight()));
+                filterApply = true;
+            }
+            if (pokemonFilterForm.getMaxWeight() != 0) {
+                predicates.add(cb.lessThanOrEqualTo(pokemon.get("weight"), pokemonFilterForm.getMaxWeight()));
+                filterApply = true;
+            }
+            if (pokemonFilterForm.getMinBaseExperience() != 0) {
+                predicates.add(cb.greaterThanOrEqualTo(pokemon.get("base_experience"), pokemonFilterForm.getMinBaseExperience()));
+                filterApply = true;
+            }
+            if (pokemonFilterForm.getMaxBaseExperience() != 0) {
+                predicates.add(cb.lessThanOrEqualTo(pokemon.get("base_experience"), pokemonFilterForm.getMaxBaseExperience()));
+                filterApply = true;
+            }
         }
 
         cq.select(pokemon).where(predicates.toArray(new Predicate[0]));

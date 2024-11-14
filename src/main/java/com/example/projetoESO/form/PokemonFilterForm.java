@@ -16,4 +16,7 @@ public class PokemonFilterForm {
     private int maxBaseExperience;
     private int page;
     private int size;
+    private long idUser;
+    private Boolean allCapturetedPokemons;
+
 }
