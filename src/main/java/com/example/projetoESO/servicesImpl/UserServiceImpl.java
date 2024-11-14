@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
         User user = null;
         Pokemon pokemon = null;
         CaptureResponseDTO response = new CaptureResponseDTO();
+        response.setError(false);
         Optional<User> userOptional = userRepository.findById(capturePokemonDTO.getIdUser());
         Optional<Pokemon> pokemonOptional = pokemonRepository.findById(capturePokemonDTO.getIdPokemon());
         if (userOptional.isPresent() && pokemonOptional.isPresent()){
@@ -46,6 +47,7 @@ public class UserServiceImpl implements UserService {
             pokemon = pokemonOptional.get();
             if(user.getPokemons().size() >= 3) {
                 response.setMessage("Jogador já capturou 3 ou mais pokemons!");
+                response.setError(true);
             } else {
                 user.addPokemon(pokemon);
                 userRepository.save(user);
