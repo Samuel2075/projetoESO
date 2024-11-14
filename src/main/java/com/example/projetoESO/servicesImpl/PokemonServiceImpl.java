@@ -50,7 +50,9 @@ public class PokemonServiceImpl implements PokemonService {
         PokemonDTO pokemonDTO = new PokemonDTO();
         pokemonDTO.setId(pokemonEntity.getId());
         pokemonDTO.setTypes(pokemonEntity.getTypes());
-        pokemonDTO.setUser(new UserPokemonDTO(pokemonEntity.getUser().getId(), pokemonEntity.getUser().getName()));
+        if(pokemonEntity.getUser() != null) {
+            pokemonDTO.setUser(new UserPokemonDTO(pokemonEntity.getUser().getId(), pokemonEntity.getUser().getName()));
+        }
         pokemonDTO.setName(pokemonEntity.getName());
         pokemonDTO.setWeight(pokemonEntity.getWeight());
         pokemonDTO.setUrlStatus(pokemonEntity.getUrlStatus());
