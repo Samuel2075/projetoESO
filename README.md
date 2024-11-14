@@ -35,4 +35,30 @@
 #### Onde se encontra todas as funções que fazem requisições a API do pokemon.
 
 ## JWT
-#### 
+#### Para essa segunda etapa do projeto como eu estou usando uma API, com o diferêncial que agora terá uma autenticação por login. Tendo isso em mente escolhi usar JWT com `Bearer Token` para manter minhas requisições mais seguras. Para que eu conseguisse usar o JWT precisei criar algumas `Classes`.
+<ol>
+  <li>SecurityConfig</li>
+  <li>JwtAuthenticationFilter</li>
+  <li>JwtServiceImpl</li>
+</ol>
+
+## SecurityConfig
+#### Esta classe é responsavel por algumas configurações de segurança. Aqui definimos rotas que precisarão de autenticação. Nesta classe também configurei o cors, para que eu consiga fazer minhas requisições.
+
+## JwtAuthenticationFilter
+#### Essa classe é responsavel pela autenticação de fato, aqui verifico cabeçalho, jwt token, username tudo referente a autenticação. O principal método dessa classe é o doFilterInternalque é herdado da classe `OncePerRequestFilter`. Isso indica que o filtro será executado uma vez por requisição.
+
+## JwtServiceImpl
+#### Essa classe é um serviço que possui métodos que irão auxiliar na autenticação. Alguns métodos são `generateToken` e `isTokenValid`.
+
+#### Usando toda essa arquitetura me possibilita fazer uma conexão mais segura entre meu back-end e o meu front-end. Algumas estratégias de expiração do token também foram adotadas e a implementação está localizada na Classe `JwtServiceImpl`. O token tem um prazo de validade de 24 horas definido no meu `aplication.properties`.
+`jwt.expiration=86400000`
+
+## Rotas
+#### Defini algumas rotas como livres de autenticação, ou seja, elas não precisam do token para serem acessadas. Essas rotas são `auth/login` e `user/register`.
+
+## Banco de dados
+#### Em relação ao banco de dados foi apenas criar uma tabela a mais e fazer um relacionamento 1:N entre usuário e pokemons. Foi preciso criar os outros arquivos, que são os do padrão repository que eu estou seguindo, mas em relação ao banco a arquitetura se mantém a mesma.
+
+## Muitas requisições e API externa bloqueando.
+#### isso não acontece comigo pois como fiz uma Job que trouxe todos os dados mais importantes dos pokemons para mim e salvou no banco. Escolhi fazer isso justamente para evitar de ser bloqueado, como todos os dados estão no meu banco de dados me facilitou o relacionamento dos dados.
