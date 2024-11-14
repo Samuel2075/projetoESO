@@ -57,6 +57,9 @@ public class PokemonServiceImpl implements PokemonService {
         pokemonDTO.setWeight(pokemonEntity.getWeight());
         pokemonDTO.setUrlStatus(pokemonEntity.getUrlStatus());
         pokemonDTO.setFront_default(pokemonEntity.getFront_default());
+        pokemonDTO.setColors(pokemonEntity.getColors());
+        pokemonDTO.setHabitat(pokemonEntity.getHabitat());
+        pokemonDTO.setBase_experience(pokemonEntity.getBase_experience());
         return pokemonDTO;
     }
 
