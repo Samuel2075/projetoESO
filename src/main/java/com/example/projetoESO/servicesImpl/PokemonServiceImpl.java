@@ -1,5 +1,7 @@
 package com.example.projetoESO.servicesImpl;
 
+import com.example.projetoESO.dto.PokemonDTO;
+import com.example.projetoESO.dto.UserPokemonDTO;
 import com.example.projetoESO.entities.Color;
 import com.example.projetoESO.entities.Habitat;
 import com.example.projetoESO.entities.Pokemon;
@@ -14,7 +16,6 @@ import jakarta.persistence.criteria.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,17 +27,35 @@ public class PokemonServiceImpl implements PokemonService {
     private EntityManager entityManager;
 
     @Override
-    public List<Pokemon> getAllPokemons(int page, int size) {
+    public List<PokemonDTO> getAllPokemons(int page, int size) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Pokemon> cq = cb.createQuery(Pokemon.class);
         Root<Pokemon> pokemon = cq.from(Pokemon.class);
         List<Predicate> predicates = new ArrayList<>();
+        List<PokemonDTO> pokemonsListResponse = new ArrayList<>();
         cq.select(pokemon).where(predicates.toArray(new Predicate[0]));
 
         TypedQuery<Pokemon> query = entityManager.createQuery(cq);
         query.setFirstResult(page * size);
         query.setMaxResults(size);
-        return query.getResultList();
+
+        query.getResultList().stream().forEach(pokemonCurrent -> {
+            pokemonsListResponse.add(convertEntityToDto(pokemonCurrent));
+        });
+
+        return pokemonsListResponse;
+    }
+
+    private PokemonDTO convertEntityToDto(Pokemon pokemonEntity) {
+        PokemonDTO pokemonDTO = new PokemonDTO();
+        pokemonDTO.setId(pokemonEntity.getId());
+        pokemonDTO.setTypes(pokemonEntity.getTypes());
+        pokemonDTO.setUser(new UserPokemonDTO(pokemonEntity.getUser().getId(), pokemonEntity.getUser().getName()));
+        pokemonDTO.setName(pokemonEntity.getName());
+        pokemonDTO.setWeight(pokemonEntity.getWeight());
+        pokemonDTO.setUrlStatus(pokemonEntity.getUrlStatus());
+        pokemonDTO.setFront_default(pokemonEntity.getFront_default());
+        return pokemonDTO;
     }
 
     @Override
@@ -56,7 +75,7 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public List<Pokemon> filterPokemons(PokemonFilterForm pokemonFilterForm) {
+    public List<PokemonDTO> filterPokemons(PokemonFilterForm pokemonFilterForm) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Pokemon> cq = cb.createQuery(Pokemon.class);
         Boolean filterApply = false;
@@ -64,7 +83,7 @@ public class PokemonServiceImpl implements PokemonService {
         Join<Pokemon, Habitat> habitat = pokemon.join("habitat");
         Join<Pokemon, Color> color = pokemon.join("colors");
         Join<Pokemon, Types> type = pokemon.join("types");
-
+        List<PokemonDTO> pokemonsResponseList;
         List<Predicate> predicates = new ArrayList<>();
         if (pokemonFilterForm.getName() != null && !pokemonFilterForm.getName().isEmpty()) {
             predicates.add(cb.like(pokemon.get("name"), "%" + pokemonFilterForm.getName() + "%"));
@@ -104,7 +123,16 @@ public class PokemonServiceImpl implements PokemonService {
         TypedQuery<Pokemon> query = entityManager.createQuery(cq);
         query.setFirstResult(pokemonFilterForm.getPage() * pokemonFilterForm.getSize());
         query.setMaxResults(pokemonFilterForm.getSize());
-        return filterApply ? query.getResultList() : this.getAllPokemons(0, 10);
+        if(filterApply) {
+            pokemonsResponseList = null;
+            query.getResultList().stream().forEach(pokemonCurrent -> {
+                pokemonsResponseList.add(convertEntityToDto(pokemonCurrent));
+            });
+        } else {
+            pokemonsResponseList = this.getAllPokemons(0, 10);
+        }
+
+        return pokemonsResponseList;
     }
 
 }

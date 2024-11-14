@@ -9,5 +9,5 @@ import java.util.List;
 @Setter
 public class ColorPokemonsDTO {
     private String name;
-    private List<PokemonDTO> pokemon_species;
+    private List<PokemonApiDTO> pokemon_species;
 }

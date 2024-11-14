@@ -19,11 +19,11 @@ public class ApiHttpServiceImpl implements ApiHttpService {
         return responseEntity;
     }
     @Override
-    public List<PokemonDTO> requestApiGetAllPokemons(int limit, int offset) {
+    public List<PokemonApiDTO> requestApiGetAllPokemons(int limit, int offset) {
         ResponseEntity<RequestDTO> responseEntity = this.requestApi(String.format("https://pokeapi.co/api/v2/pokemon?limit=%d&offset=%d", limit, offset), RequestDTO.class);
         ObjectMapper objectMapper = new ObjectMapper();
         return responseEntity.getBody().getResults().stream()
-                .map(item -> objectMapper.convertValue(item, PokemonDTO.class))
+                .map(item -> objectMapper.convertValue(item, PokemonApiDTO.class))
                 .collect(Collectors.toList());
     }
 

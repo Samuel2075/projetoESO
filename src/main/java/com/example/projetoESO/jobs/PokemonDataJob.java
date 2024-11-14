@@ -60,7 +60,7 @@ public class PokemonDataJob {
 
     private void populatePokemon() {
         List<Types> typesPokemon = new ArrayList<>();
-        List<PokemonDTO> pokemonsList = apiHttpService.requestApiGetAllPokemons(1303, 0);
+        List<PokemonApiDTO> pokemonsList = apiHttpService.requestApiGetAllPokemons(1303, 0);
         pokemonsList.forEach((pokemon) -> {
             PokemonStatusDTO pokemonStatusDTO = apiHttpService.requestApiGetStatusPokemon(pokemon.getName());
 
