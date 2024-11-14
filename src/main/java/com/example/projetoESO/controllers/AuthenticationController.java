@@ -32,7 +32,7 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        loginResponseDTO.setUser(userService.findByUserName(loginForm.getUsername()));
+        loginResponseDTO.setUserId(userService.findByUserName(loginForm.getUsername()).getId());
         loginResponseDTO.setToken(jwtService.generateToken(userDetails.getUsername()));
         loginResponseDTO.setMessage("Login efetuado com sucesso!");
 
